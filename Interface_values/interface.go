@@ -40,5 +40,5 @@ func main() {
 }
 
 func describe(i I) {
-	fmt.Printf("(%v, %T)\n", i, i)
+	fmt.Printf("(%v, %T)\n", i, i) // %T là in ra kiểu dữ liệu của i
 }
