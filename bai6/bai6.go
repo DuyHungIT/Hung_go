@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:bai6/bai6.go
 package main
 
 import (
@@ -122,3 +123,102 @@ func main() {
 	fmt.Println("Email:", ob.email)
 	fmt.Println("Phone:", ob.phone)
 }
+=======
+package person
+
+import (
+	"errors"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
+)
+
+// khai báo 1 struct Person
+type Person struct {
+	Name         string
+	BirthdayYear int
+	Age          int
+	Email        string
+	Phone        string
+}
+
+// interface
+type PersonInterface interface {
+	SetName(string) error
+	SetBirthdayYear(int) error
+	SetEmail(string) error
+	SetPhone(interface{}) error
+}
+
+func NewPerson() {
+	// viet cho a ham nay, tim hieu dependency injection nhe
+}
+
+// // setName : set vào name của Person
+func (ob *Person) SetName(name string) error {
+	if name == "" {
+		return errors.New("lỗi, không dược để trống")
+	}
+	// Check if the first letter is uppercase
+	firstLetter := name[:1]
+	if firstLetter != strings.ToUpper(firstLetter) {
+		return errors.New("Lỗi, đọc lại yêu cầu")
+	}
+	// Check name format using regex
+	nameRegex := regexp.MustCompile(`^[A-Z][a-zA-Z]*$`)
+	if !nameRegex.MatchString(name) {
+		return errors.New("tên không đúng định dạng")
+	}
+	ob.Name = name
+	return nil
+}
+
+// setBirthdayYear
+func (ob *Person) SetBirthdayYear(num int) error {
+	if num > 1900 {
+		ob.BirthdayYear = num
+		ob.Age = time.Now().Year() - num
+	} else {
+		return errors.New("lỗi năm, đọc lại yêu cầu")
+	}
+	return nil
+}
+
+// setEmail
+func (ob *Person) SetEmail(email string) error {
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	if !emailRegex.MatchString(email) {
+		return errors.New("lỗi email, định dạng")
+	}
+	ob.Email = email
+	return nil
+}
+
+// setPhone
+func (ob *Person) SetPhone(phone interface{}) error {
+	// gán typePhone là kiểu đầu vào của phone
+	phoneStr111 := phone.(string)
+	switch phone.(type) { 
+	case string:
+		// strings.HasPerfix trả về bool khi bắt đầu chuỗi là đúng
+		if !strings.HasPrefix(phoneStr111, "+") || len(phoneStr111) != 12 && len(phoneStr111) != 11 {
+			return errors.New("lỗi SĐT, đọc lại yêu cầu")
+		} else {
+			ob.Phone = phoneStr111
+		}
+
+	case int:
+		//var myString = strconv.Itoa(myInt)
+		phoneStr := strconv.Itoa(phone)
+		if !strings.HasPrefix(phoneStr, "0") || (len(phoneStr) != 11 && len(phoneStr) != 10) {
+			return errors.New("lỗi SĐT, đọc lại yêu cầu")
+		}
+		ob.Phone = phoneStr
+
+	default:
+		return errors.New("Lỗi SĐT")
+	}
+	return nil
+}
+>>>>>>> Stashed changes:Person/Person.go
